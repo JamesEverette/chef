@@ -39,6 +39,7 @@ class Chef
         super
         @path = name
         @recursive = false
+        @recursive_ogm = false
       end
 
       def recursive(arg = nil)
@@ -56,6 +57,13 @@ class Chef
           :kind_of => String
         )
       end
+      def recursive_ogm(arg = nil)
+        set_or_return(
+          :recursive_ogm
+          arg,
+          :kind_of => [ TrueClass, FalseClass ]
+        )
+     end
 
     end
   end

@@ -125,7 +125,23 @@ class Chef
         unless ::File.exists?(new_resource.path)
           converge_by("create new directory #{new_resource.path}") do
             if new_resource.recursive == true
-              ::FileUtils.mkdir_p(new_resource.path)
+
+              if new_resource.recursive_ogm == true
+                dir_list = new_resource.path.split('/')
+                dir_string = ''
+                big_dir_string = ''
+                dir_list.drop(1).each do |item|
+                        dir_string = dir_string + '/' + item
+                        big_dir_string = big_dir_string + ' ' + dir_string
+                end
+                big_dir_string.slice!(0)
+                big_dir_string.split(' ').each do |path|
+                  unless ::File.exists?(path)
+                    ::FileUtils.mkdir_p(new_resource.path)
+                  end
+                end
+              end
+
             else
               ::Dir.mkdir(new_resource.path)
             end
